@@ -8,12 +8,14 @@
   "memory": 128,
   "timeout": 100,
   "lambda_path": "lambdas/hello_world",
-  "alias": "${lambdas_alias_name}",
   "dependencies": [],
   "event_sources": [],
   "env_variables": {},
-  "publish_version": false,
-  "url_config": {},
+  "publish_version": true,
+  "alias": "${lambdas_alias_name}",
+  "url_config": {
+    "auth_type": "NONE"
+  },
   "ephemeral_storage": 512,
   "logs_expiration": "${logs_expiration}",
   "tags": {}
