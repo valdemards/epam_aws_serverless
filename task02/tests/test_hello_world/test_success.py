@@ -29,6 +29,7 @@ class TestSuccess(HelloWorldLambdaTestCase):
         response = self.HANDLER.lambda_handler(self.success_event, {})
         response_body = json.loads(response['body'])
         self.assertEqual(response['statusCode'], 200)
+        self.assertEqual(response_body['statusCode'], 200)
         self.assertEqual(response_body['message'], "Hello from Lambda")
 
     def test_failure_method_not_allowed(self):
@@ -39,6 +40,7 @@ class TestSuccess(HelloWorldLambdaTestCase):
         response = self.HANDLER.lambda_handler(self.error_event, {})
         response_body = json.loads(response['body'])
         self.assertEqual(response['statusCode'], 400)
+        self.assertEqual(response_body['statusCode'], 400)
         self.assertIn('unsupported method', response_body['message'])
 
     def test_failure_wrong_endpoint(self):
@@ -49,5 +51,6 @@ class TestSuccess(HelloWorldLambdaTestCase):
         response = self.HANDLER.lambda_handler(self.error_event, {})
         response_body = json.loads(response['body'])
         self.assertEqual(response['statusCode'], 400)
+        self.assertEqual(response_body['statusCode'], 400)
         self.assertIn('Bad request syntax or unsupported method', response_body['message'])
 

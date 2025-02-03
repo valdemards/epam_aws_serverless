@@ -19,6 +19,7 @@ class HelloWorld(AbstractLambda):
             return {
                 "statusCode": 200,
                 "body": json.dumps({
+                    "statusCode": 200,
                     "message": "Hello from Lambda"
                 })
             }
@@ -27,7 +28,8 @@ class HelloWorld(AbstractLambda):
             return {
                 "statusCode": 400,
                 "body": json.dumps({
-                "message": f"Bad request syntax or unsupported method. Request path: {path}. HTTP method: {http_method}"
+                    "statusCode": 400,
+                    "message": f"Bad request syntax or unsupported method. Request path: {path}. HTTP method: {http_method}"
                 })
             }
 
