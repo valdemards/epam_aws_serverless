@@ -27,7 +27,7 @@
   },
   "task3_api": {
     "resource_type": "api_gateway",
-    "deploy_stage": "dev",
+    "deploy_stage": "api",
     "resources": {
       "/hello": {
         "GET": {
