@@ -12,7 +12,7 @@
   "event_sources": [
     {
       "resource_type": "dynamodb_trigger",
-      "target_table": "${trigger_table}",
+      "target_table": "Configuration",
       "batch_size": 1,
       "function_response_types": [
         "ReportBatchItemFailures"

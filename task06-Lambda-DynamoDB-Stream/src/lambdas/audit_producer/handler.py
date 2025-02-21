@@ -9,8 +9,6 @@ from commons.abstract_lambda import AbstractLambda
 _LOG = get_logger(__name__)
 
 dynamodb = boto3.resource("dynamodb", region_name=os.getenv("region", "eu-central-1"))
-# trigger_table_name = os.environ.get('trigger_table', "Configuration")
-# trigger_table = dynamodb.Table(trigger_table_name)
 target_table_name = os.environ.get('target_table', "Audit")
 target_table = dynamodb.Table(target_table_name)
 
@@ -22,18 +20,13 @@ class AuditProducer(AbstractLambda):
         pass
 
     def handle_request(self, event, context):
-        # dynamodb = boto3.resource('dynamodb')
-        # audit_table = dynamodb.Table('Audit')
-        print(event)
         for record in event['Records']:
             # Only process MODIFY and INSERT events
             if record['eventName'] in ['INSERT', 'MODIFY']:
                 new_image = record['dynamodb']['NewImage']
                 old_image = record['dynamodb'].get('OldImage')
-
                 item_key = new_image['key']['S']
                 modification_time = datetime.utcnow().isoformat() + 'Z'
-
                 if record['eventName'] == 'INSERT':
                     newValue = {
                         'key': item_key,
@@ -45,7 +38,6 @@ class AuditProducer(AbstractLambda):
                         'modificationTime': modification_time,
                         'newValue': newValue
                     }
-                    print(audit_entry)
                 elif record['eventName'] == 'MODIFY':
                     updated_attr = 'value'  # Assuming 'value' is the only field that can change
                     oldValue = int(old_image['value']['N'])
@@ -58,12 +50,8 @@ class AuditProducer(AbstractLambda):
                         'oldValue': oldValue,
                         'newValue': newValue
                     }
-
                 # Put the audit entry into the Audit table
-                print(audit_entry)
                 target = target_table.put_item(Item=audit_entry)
-                print(target)
-
         return 200
 
 HANDLER = AuditProducer()
