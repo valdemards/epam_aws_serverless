@@ -11,16 +11,18 @@
   "dependencies": [],
   "event_sources": [
     {
-    "resource_type": "dynamodb_trigger",
-    "target_table": "${trigger_table}",
-    "batch_size": 123,
-    "function_response_types": ["ReportBatchItemFailures"]
+      "resource_type": "dynamodb_trigger",
+      "target_table": "${trigger_table}",
+      "batch_size": 1,
+      "function_response_types": [
+        "ReportBatchItemFailures"
+      ]
     }
   ],
   "env_variables": {
     "region": "${region}",
     "target_table": "${target_table}"
-   },
+  },
   "publish_version": true,
   "alias": "${lambdas_alias_name}",
   "url_config": {},

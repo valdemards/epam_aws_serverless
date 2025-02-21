@@ -23,7 +23,7 @@ class AuditProducer(AbstractLambda):
     def handle_request(self, event, context):
         # dynamodb = boto3.resource('dynamodb')
         # audit_table = dynamodb.Table('Audit')
-
+        print(event)
         for record in event['Records']:
             # Only process MODIFY and INSERT events
             if record['eventName'] in ['INSERT', 'MODIFY']:
