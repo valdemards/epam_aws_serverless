@@ -19,6 +19,7 @@ class AuditProducer(AbstractLambda):
     def validate_request(self, event) -> dict:
         if 'Records' not in event or not event['Records']:
             raise ValueError("No DynamoDB records found in the event.")
+        pass
 
     def handle_request(self, event, context):
         # dynamodb = boto3.resource('dynamodb')
@@ -44,6 +45,7 @@ class AuditProducer(AbstractLambda):
                         'modificationTime': modification_time,
                         'newValue': newValue
                     }
+                    print(audit_entry)
                 elif record['eventName'] == 'MODIFY':
                     updated_attr = 'value'  # Assuming 'value' is the only field that can change
                     oldValue = int(old_image['value']['N'])
@@ -58,7 +60,9 @@ class AuditProducer(AbstractLambda):
                     }
 
                 # Put the audit entry into the Audit table
-                target_table.put_item(Item=audit_entry)
+                print(audit_entry)
+                target = target_table.put_item(Item=audit_entry)
+                print(target)
 
         return 200
 
