@@ -48,8 +48,13 @@
   },
   "Events": {
     "resource_type": "dynamodb_table",
+<<<<<<< HEAD
     "hash_key_name": "principalId",
     "hash_key_type": "N",
+=======
+    "hash_key_name": "id",
+    "hash_key_type": "S",
+>>>>>>> d3be2baa5e2a2a2d3a27036a29277e42a33f72ac
     "read_capacity": 1,
     "write_capacity": 1,
     "global_indexes": [],

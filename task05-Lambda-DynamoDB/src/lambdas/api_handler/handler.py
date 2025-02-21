@@ -10,7 +10,11 @@ _LOG = get_logger(__name__)
 
 # Создаем клиент DynamoDB
 dynamodb = boto3.resource("dynamodb", region_name=os.getenv("region", "eu-central-1"))
+<<<<<<< HEAD
 table_name = os.environ.get("target_table", "Events")
+=======
+table_name = os.environ.get('target_table', "Events")
+>>>>>>> d3be2baa5e2a2a2d3a27036a29277e42a33f72ac
 table = dynamodb.Table(table_name)
 
 
@@ -46,7 +50,11 @@ class ApiHandler(AbstractLambda):
             # Возвращаем ответ с кодом 201 (Created)
             return {
                 "statusCode": 201,
+<<<<<<< HEAD
                 "event": json.dumps(event_item)
+=======
+                "event": event_item
+>>>>>>> d3be2baa5e2a2a2d3a27036a29277e42a33f72ac
             }
 
         except ValueError as e:
