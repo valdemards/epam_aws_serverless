@@ -12,6 +12,7 @@
             "dynamodb:PutItem",
             "dynamodb:Batch*",
             "dynamodb:DeleteItem",
+            "dynamodb:Scan",
             "ssm:PutParameter",
             "ssm:GetParameter",
             "kms:Decrypt",
@@ -85,6 +86,26 @@
           "api_key_required": false,
           "enable_proxy": true,
           "method_request_parameters": {},
+          "integration_request_parameters": {},
+          "integration_request_body_template": {},
+          "responses": [],
+          "integration_responses": [],
+          "default_error_pattern": true
+        }
+      },
+      "/tables/{tableId}": {
+        "enable_cors": false,
+        "GET": {
+          "authorization_type": "NONE",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler",
+          "api_key_required": false,
+          "enable_proxy": true,
+          "method_request_parameters": {
+            "method.request.path.tableId": false
+          },
+          "integration_request_parameters": {
+          },
           "integration_request_body_template": {},
           "responses": [],
           "integration_responses": [],

@@ -13,7 +13,12 @@ _LOG = get_logger(__name__)
 reservations_table = os.environ.get('reservations_table', "Reservations")
 user_pool_id = os.environ.get('user_pool_id', "simple-booking-userpool")
 client_id = os.environ.get('client_id', "simple-booking-userpool")
-
+response_headers = {
+                    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': '*',
+                    'Accept-Version': '*'
+                    }
 
 class ApiHandler(AbstractLambda):
 
@@ -38,6 +43,7 @@ class ApiHandler(AbstractLambda):
             except KeyError:
                 return {
                     'statusCode': 400,
+                    'headers': response_headers,
                     'body': json.dumps('Bad Request: Missing required parameters.')
                 }
         
@@ -45,6 +51,7 @@ class ApiHandler(AbstractLambda):
             if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
                 return {
                     'statusCode': 400,
+                    'headers': response_headers,
                     'body': json.dumps('Bad Request: Invalid email format.')
                 }
             # Validate password
@@ -52,6 +59,7 @@ class ApiHandler(AbstractLambda):
             if not re.match(password_regex, password):
                 return {
                     'statusCode': 400,
+                    'headers': response_headers,
                     'body': json.dumps('Bad Request: Password does not meet criteria.')
                 }
             # Create user in Cognito
@@ -81,12 +89,14 @@ class ApiHandler(AbstractLambda):
                 print(e)
                 return {
                     'statusCode': 400,
+                    'headers': response_headers,
                     'body': json.dumps('Bad Request: Unable to sign up user.')
                 }
         
             # Return success status
             return {
                 'statusCode': 200,
+                'headers': response_headers,
                 'body': json.dumps('OK: Sign-up process is successful.')
             }
 
@@ -98,6 +108,7 @@ class ApiHandler(AbstractLambda):
             except:
                 return {
                     'statusCode': 400,
+                    'headers': response_headers,
                     'body': json.dumps('Bad Request: Missing or malformed request data.')
                 }
             try:
@@ -116,13 +127,18 @@ class ApiHandler(AbstractLambda):
                 access_token = response['AuthenticationResult']['AccessToken'] 
                 id_token = response['AuthenticationResult']['IdToken']
                 return {
-                    "statusCode": 200, 
+                    "statusCode": 200,
+                    'headers': response_headers, 
                     "body": json.dumps({"accessToken": id_token})
                 }
             
             except ClientError as e:
                 error_message = e.response['Error']['Message']
-                return {'statusCode': 400, 'body': json.dumps(f'Failed to authenticate: {error_message}')}
+                return {
+                    'statusCode': 400, 
+                    'headers': response_headers,
+                    'body': json.dumps(f'Failed to authenticate: {error_message}')
+                    }
 
         if method == 'POST' and path == '/tables':
             dynamodb = boto3.resource("dynamodb", region_name=os.getenv("region", "eu-central-1"))
@@ -140,7 +156,8 @@ class ApiHandler(AbstractLambda):
             target = target_table.put_item(Item=tables_entry)
         
             return {
-                "statusCode": 200, 
+                "statusCode": 200,
+                'headers': response_headers, 
                 "body": json.dumps({"id": int(body['id'])})
             }
         
@@ -155,14 +172,16 @@ class ApiHandler(AbstractLambda):
                 response = target_table.get_item(Key={'id': int(table_id)})
                 item = response['Item']
                 return {
-                    "statusCode": 200, 
+                    "statusCode": 200,
+                    'headers': response_headers, 
                     "body": json.dumps(item, default=int)
                 }
             else:
                 response = target_table.scan()
                 items = response['Items']
                 return {
-                    "statusCode": 200, 
+                    "statusCode": 200,
+                    'headers': response_headers, 
                     "body": json.dumps({"tables": items}, default=int)
                 }
             
@@ -194,7 +213,8 @@ class ApiHandler(AbstractLambda):
 
             if reservation_entry['tableNumber'] not in table_numbers:
                 return {    
-                    "statusCode": 400, 
+                    "statusCode": 400,
+                    'headers': response_headers, 
                     "body": json.dumps({"error": "Table number does not exist"})
                 }
             
@@ -206,13 +226,15 @@ class ApiHandler(AbstractLambda):
                     new_reservation_end = datetime.strptime(reservation_entry['slotTimeEnd'], '%H:%M')
                     if (new_reservation_start >= reservation_start and new_reservation_start <= reservation_end) or (new_reservation_end >= reservation_start and new_reservation_end <= reservation_end):
                         return {    
-                            "statusCode": 400, 
+                            "statusCode": 400,
+                            'headers': response_headers, 
                             "body": json.dumps({"error": "Reservation already exists for the same table and date"})
                         }
                     
             target = reservations_table.put_item(Item=reservation_entry)
             return {
-                "statusCode": 200, 
+                "statusCode": 200,
+                'headers': response_headers, 
                 "body": json.dumps({"reservationId": reservation_entry['id']})
             }
     
@@ -223,7 +245,8 @@ class ApiHandler(AbstractLambda):
             response = reservations_table.scan()
             items = response['Items']
             return {
-                "statusCode": 200, 
+                "statusCode": 200,
+                'headers': response_headers, 
                 "body": json.dumps({"reservations": items}, default=int)
             }
    
