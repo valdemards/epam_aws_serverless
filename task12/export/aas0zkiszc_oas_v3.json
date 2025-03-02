@@ -447,8 +447,47 @@
     },
     "/signup": {
       "post": {
+        "summary": "User Signup",
+        "description": "Registers a new user in the system.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string",
+                    "example": "Bob"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "example": "Robson"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "123@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "afsbbiHG$123d"
+                  }
+                },
+                "required": [
+                  "firstName",
+                  "lastName",
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
+            "summary": "User Signup",
             "description": "200 response",
             "headers": {
               "Access-Control-Allow-Origin": {
@@ -544,6 +583,17 @@
           }
         }
       },
+      "SignupResponse": {
+        "type": "object",
+        "properties": {
+          "signup": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SignUp"
+            }
+          }
+        }
+      },
       "Reservation": {
         "type": "object",
         "properties": {
@@ -590,7 +640,9 @@
         "bearerFormat": "JWT",
         "x-amazon-apigateway-authorizer": {
           "type": "cognito_user_pools",
-          "x-syndicate-cognito-userpool-names": ["cognito_userpool_name"]
+          "x-syndicate-cognito-userpool-names": [
+            "cognito_userpool_name"
+          ]
         }
       }
     }
