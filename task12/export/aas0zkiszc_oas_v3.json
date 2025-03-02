@@ -257,8 +257,37 @@
     },
     "/signin": {
       "post": {
+        "summary": "User Signin",
+        "description": "Login a user in the system.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "123@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "afsbbiHG$123d"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
+            "summary": "User Signin",
             "description": "200 response",
             "headers": {
               "Access-Control-Allow-Origin": {
@@ -590,6 +619,17 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SignUp"
+            }
+          }
+        }
+      },
+      "SigninResponse": {
+        "type": "object",
+        "properties": {
+          "signup": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SignIn"
             }
           }
         }
