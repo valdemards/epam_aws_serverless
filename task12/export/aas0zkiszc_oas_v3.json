@@ -30,7 +30,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/ReservationsResponse"
                 }
               }
             }
@@ -65,7 +65,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/ReservationsResponse"
                 }
               }
             }
@@ -110,7 +110,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref": "#/components/schemas/ReservationsResponse"
                 }
               }
             }
@@ -533,9 +533,65 @@
   },
   "components": {
     "schemas": {
-      "Empty": {
-        "title": "Empty Schema",
-        "type": "object"
+      "ReservationsResponse": {
+        "type": "object",
+        "properties": {
+          "reservations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Reservation"
+            }
+          }
+        }
+      },
+      "Reservation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "tableNumber": {
+            "type": "integer"
+          },
+          "clientName": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "slotTimeStart": {
+            "type": "string"
+          },
+          "slotTimeEnd": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "cognitoAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "x-amazon-apigateway-authorizer": {
+          "type": "cognito_user_pools",
+          "x-syndicate-cognito-userpool-names": ["cognito_userpool_name"]
+        }
       }
     }
   },
