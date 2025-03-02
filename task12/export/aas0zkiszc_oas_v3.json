@@ -17,6 +17,8 @@
   "paths": {
     "/reservations": {
       "get": {
+        "summary": "User Signup",
+        "description": "Registers a new user in the system.",
         "responses": {
           "200": {
             "description": "200 response",
@@ -52,6 +54,46 @@
         }
       },
       "post": {
+        "summary": "User Signup",
+        "description": "Registers a new user in the system.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tableNumber": {
+                    "type": "integer"
+                  },
+                  "clientName": {
+                    "type": "string"
+                  },
+                  "phoneNumber": {
+                    "type": "integer"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "slotTimeStart": {
+                    "type": "string"
+                  },
+                  "slotTimeEnd": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "tableNumber",
+                  "clientName",
+                  "phoneNumber",
+                  "date",
+                  "slotTimeStart",
+                  "slotTimeEnd"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "200 response",
